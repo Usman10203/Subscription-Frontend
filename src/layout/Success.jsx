@@ -70,7 +70,7 @@ const Success = () => {
   console.log(` JSON.stringify({ sessionId, firebaseId: userId })`, JSON.stringify({ sessionId, firebaseId: userId }));
   const handlePaymentSuccess = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_PUBLIC_BASE_URL}/payment-success`, {
+      const response = await fetch(`https://subscription-backend-ruddy.vercel.app/api/v1/payment-success`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -80,7 +80,7 @@ const Success = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.message);
+        console.log("data", data.message);
         navigate("/");
       } else {
         // Optionally handle non-OK responses here

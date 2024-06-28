@@ -3,7 +3,8 @@ import basic from "../assets/basic.svg";
 import pro from "../assets/pro.svg";
 import business from "../assets/business.svg";
 import firebase from "../firebase/firebaseConfig";
-
+import { toast } from "react-toastify";
+const apiUrl = import.meta.env.VITE_APP_PUBLIC_BASE_URL;
 const data = [
   {
     id: 1,
@@ -40,8 +41,11 @@ const Home = () => {
         const userRef = firebase.database().ref("users/" + user.uid);
         userRef.on("value", (snapshot) => {
           const user = snapshot.val();
+          console.log(`user`, user);
           if (user) {
-            setPlanType(user.subscription.planType || "");
+            localStorage.setItem("planType", user.subscription.planType);
+            // setPlanType(user.subscription.planType || "");
+            setPlanType(user.subscription.planType);
           }
         });
       } else {
@@ -52,8 +56,13 @@ const Home = () => {
   }, [userId]);
 
   const checkout = (plan) => {
+    if (!userId) {
+      toast.error("Please Login to Subscribe")
+      return;
+    }
     console.log(`plan`, plan);
-    fetch(`${process.env.REACT_APP_PUBLIC_BASE_URL}/create-subscription-checkout-session`, {
+    console.log(`process env`, apiUrl);
+    fetch(`${apiUrl}/create-subscription-checkout-session`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +84,7 @@ const Home = () => {
         console.log(e);
       });
   };
-
+  console.log(`plantype`, planType);
   return (
     <>
       <div className="flex flex-col items-center w-full mx-auto min-h-screen diagonal-background overflow-x-hidden">
@@ -139,7 +148,16 @@ const Home = () => {
                   </button>
                 ) : (
                   <button
-                    onClick={() => checkout(Number(item.price))}
+                    onClick={() => {
+                      if (planType) {
+                        const confirmation = window.confirm("Your current subscription will be cancelled. Do you want to continue?");
+                        if (confirmation) {
+                          checkout(Number(item.price));
+                        }
+                      } else {
+                        checkout(Number(item.price));
+                      }
+                    }}
                     className="bg-[#3d5fc4] text-white rounded-md text-base uppercase w-24 py-2 font-bold"
                   >
                     Start
