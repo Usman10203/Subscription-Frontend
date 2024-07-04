@@ -36,12 +36,12 @@ const Home = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         setUserId(user.uid);
-        console.log(`userId`, userId);
+        // console.log(`userId`, userId);
         setUserName(user.displayName);
         const userRef = firebase.database().ref("users/" + user.uid);
         userRef.on("value", (snapshot) => {
           const user = snapshot.val();
-          console.log(`user`, user);
+          // console.log(`user`, user);
           if (user) {
             localStorage.setItem("planType", user.subscription.planType);
             // setPlanType(user.subscription.planType || "");
@@ -60,8 +60,8 @@ const Home = () => {
       toast.error("Please Login to Subscribe")
       return;
     }
-    console.log(`plan`, plan);
-    console.log(`process env`, apiUrl);
+    //console.log(`plan`, plan);
+    //console.log(`process env`, apiUrl);
     fetch(`${apiUrl}/create-subscription-checkout-session`, {
       method: "POST",
       headers: {
@@ -72,9 +72,9 @@ const Home = () => {
     })
       .then((res) => {
         if (res.ok)
-          console.log('res', res);
-        // console.log('res.json()', res.json());
-        return res.json();
+          //console.log('res', res);
+          // console.log('res.json()', res.json());
+          return res.json();
         //return res.json().then((json) => Promise.reject(json));
       })
       .then(({ session }) => {
@@ -84,7 +84,7 @@ const Home = () => {
         console.log(e);
       });
   };
-  console.log(`plantype`, planType);
+  //console.log(`plantype`, planType);
   return (
     <>
       <div className="flex flex-col items-center w-full mx-auto min-h-screen diagonal-background overflow-x-hidden">

@@ -67,7 +67,7 @@ const Success = () => {
   //     });
   // }
 
-  console.log(` JSON.stringify({ sessionId, firebaseId: userId })`, JSON.stringify({ sessionId, firebaseId: userId }));
+  // console.log(` JSON.stringify({ sessionId, firebaseId: userId })`, JSON.stringify({ sessionId, firebaseId: userId }));
   const handlePaymentSuccess = async () => {
     try {
       const response = await fetch(`https://subscription-backend-ruddy.vercel.app/api/v1/payment-success`, {
@@ -80,12 +80,12 @@ const Success = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("data", data.message);
+        // console.log("data", data.message);
         navigate("/");
       } else {
         // Optionally handle non-OK responses here
         // const errorData = await response.json();
-        // throw new Error(errorData.message || 'Something went wrong');
+        throw new Error(errorData.message || 'Something went wrong');
       }
     } catch (e) {
       console.log(e.message);
